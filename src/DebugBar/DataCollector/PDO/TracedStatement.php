@@ -123,7 +123,12 @@ class TracedStatement
             }
 
             $matchRule = "/({$marker}(?!\w))(?=(?:[^$quotationChar]|[$quotationChar][^$quotationChar]*[$quotationChar])*$)/";
-            for ($i = 0; $i <= mb_substr_count($sql, $k); $i++) {
+
+            if (($count = mb_substr_count($sql, $k)) < 1) {
+                $count = mb_substr_count($sql, $matchRule);
+            }
+
+            for ($i = 0; $i <= $count; $i++) {
                 $sql = preg_replace($matchRule, $v, $sql, 1);
             }
         }
